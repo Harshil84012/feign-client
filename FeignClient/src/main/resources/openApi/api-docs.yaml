@@ -1,0 +1,146 @@
+openapi: 3.0.1
+info:
+  title: Spring security
+  description: Spring Security Newer Version
+  version: 0.0.1
+servers:
+  - url: http://localhost:9090
+    description: Generated server url
+security:
+  - Authorization:
+      - Authorization
+paths:
+  /product/update/{id}:
+    put:
+      tags:
+        - product-controller
+      operationId: update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestProductDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+  /product/add:
+    post:
+      tags:
+        - product-controller
+      operationId: addProduct
+      parameters:
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestProductDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+  /product/findById/{id}:
+    get:
+      tags:
+        - product-controller
+      operationId: findById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+  /product/display:
+    get:
+      tags:
+        - product-controller
+      operationId: findAll
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+  /product/delete/{id}:
+    delete:
+      tags:
+        - product-controller
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+components:
+  schemas:
+    RequestProductDto:
+      required:
+        - brand
+        - price
+        - productname
+        - qty
+      type: object
+      properties:
+        productname:
+          type: string
+        price:
+          type: integer
+          format: int64
+        qty:
+          type: integer
+          format: int64
+        brand:
+          type: string
+    ApiResponseObject:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+        data:
+          type: object
+  securitySchemes:
+    Authorization:
+      type: http
+      description: <b>Jwt Token Coming from Sign In API</b>
+      scheme: bearer
